@@ -1,35 +1,40 @@
 <?php
 
+
 namespace app\modules\wm\b24\crm;
 
-//Код не универсален а направлен на смарт процессы стоит перенести в другой класс
+
 use yii\helpers\ArrayHelper;
-use app\modules\wm\b24\ActiveQuery;
 
-class StageActiveQuery extends ActiveQuery {
 
-    protected $listMethodName = 'crm.status.list';
+class LeadActiveQuery extends \app\modules\wm\b24\ActiveQuery
+{
+    protected $listMethodName = 'crm.lead.list';
 
-    protected $oneMethodName = 'crm.status.get';
+    protected $oneMethodName = 'crm.lead.get';
 
 //    protected function getPrimaryTableName()
 //    {
+////        Yii::warning($this->modelClass, '$this->modelClass');
 //        $modelClass = $this->modelClass;
 //        //return $modelClass::tableName();
 //        return $modelClass::entityTypeId();
 //    }
 
     protected function prepairParams(){
+//        \Yii::warning($this->orderBy, '$this->orderBy');
         $data = [
             'filter' => $this->where,
             'order' => $this->orderBy,
-            //'select' => $this->select,
+            'select' => $this->select,
             //Остальные параметры
         ];
+        //Yii::warning($data, '$data');
         $this->params = $data;
     }
 
     protected function prepairOneParams(){
+//        \Yii::warning($this->orderBy, '$this->orderBy');
         $id = null;
         if(ArrayHelper::getValue($this->where, 'id')){
             $id = ArrayHelper::getValue($this->where, 'id');

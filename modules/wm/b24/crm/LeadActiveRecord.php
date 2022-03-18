@@ -1,20 +1,17 @@
 <?php
 
+
 namespace app\modules\wm\b24\crm;
 
-//use yii\base\Model;
-use Bitrix24\B24Object;
-use wm\b24tools\b24Tools;
+
 use Yii;
-use yii\helpers\ArrayHelper;
 
 
-class CrmContactActiveRecord extends \app\modules\wm\b24\ActiveRecord
+class LeadActiveRecord extends \app\modules\wm\b24\ActiveRecord
 {
-
     public static function fieldsMethod()
     {
-        return 'crm.contact.fields';
+        return 'crm.lead.fields';
     }
 
     public function fields()
@@ -29,6 +26,6 @@ class CrmContactActiveRecord extends \app\modules\wm\b24\ActiveRecord
 
     public static function find()
     {
-        return Yii::createObject(ContactActiveQuery::className(), [get_called_class()]);
+        return Yii::createObject(LeadActiveQuery::className(), [get_called_class()]);
     }
 }

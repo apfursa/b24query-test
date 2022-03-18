@@ -1,13 +1,20 @@
 <?php
 
+
 namespace app\modules\wm\b24\crm;
 
-//Код не универсален а направлен на смарт процессы стоит перенести в другой класс
-use yii\helpers\ArrayHelper;
-use app\modules\wm\b24\ActiveQuery;
 
-class CrmActiveQuery extends ActiveQuery {
-//    public $entityTypeId;
+use yii\helpers\ArrayHelper;
+
+class CompanyActiveQuery extends \app\modules\wm\b24\ActiveQuery
+{
+    //    public $entityTypeId;
+
+    protected $listMethodName = 'crm.company.list';
+
+    protected $oneMethodName = 'crm.company.get';
+
+
 
     public function getEntityTypeIdUsedInFrom()
     {
@@ -20,7 +27,6 @@ class CrmActiveQuery extends ActiveQuery {
 
 //    protected function getPrimaryTableName()
 //    {
-////        Yii::warning($this->modelClass, '$this->modelClass');
 //        $modelClass = $this->modelClass;
 //        //return $modelClass::tableName();
 //        return $modelClass::entityTypeId();
@@ -28,7 +34,6 @@ class CrmActiveQuery extends ActiveQuery {
 
     protected function prepairParams(){
 //        $this->getEntityTypeIdUsedInFrom();
-//        \Yii::warning($this->orderBy, '$this->orderBy');
         $data = [
 //            'entityTypeId' => $this->entityTypeId,
             'filter' => $this->where,
@@ -36,18 +41,11 @@ class CrmActiveQuery extends ActiveQuery {
             'select' => $this->select,
             //Остальные параметры
         ];
-        //Yii::warning($data, '$data');
         $this->params = $data;
-    }
-
-    public static function oneDataSelector()
-    {
-        return 'result';
     }
 
     protected function prepairOneParams(){
         $this->getEntityTypeIdUsedInFrom();
-        \Yii::warning($this->orderBy, '$this->orderBy');
         $id = null;
         if(ArrayHelper::getValue($this->where, 'id')){
             $id = ArrayHelper::getValue($this->where, 'id');

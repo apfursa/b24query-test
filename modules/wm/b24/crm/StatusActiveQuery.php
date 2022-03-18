@@ -1,29 +1,24 @@
 <?php
 
+
 namespace app\modules\wm\b24\crm;
 
-//Код не универсален а направлен на смарт процессы стоит перенести в другой класс
-use yii\helpers\ArrayHelper;
-use app\modules\wm\b24\ActiveQuery;
 
-class CategoryActiveQuery extends ActiveQuery {
-    public $entityTypeId;
+class StatusActiveQuery extends \app\modules\wm\b24\ActiveQuery
+{
+    //    public $entityTypeId;
 
-    protected $listMethodName = 'crm.category.list';
+    protected $listMethodName = 'crm.status.list';
 
-    protected $oneMethodName = 'crm.category.get';
-
-    protected $listDataSelector = 'result.categories';
-
-    protected $oneDataSelector = 'result.category';
+    protected $oneMethodName = 'crm.status.get';
 
     public function getEntityTypeIdUsedInFrom()
     {
-        if (empty($this->entityTypeId)) {
-            $this->entityTypeId = $this->modelClass::entityTypeId();
-        }
+//        if (empty($this->entityTypeId)) {
+//            $this->entityTypeId = $this->modelClass::entityTypeId();
+//        }
 
-        return $this->entityTypeId;
+        return '';
     }
 
 //    protected function getPrimaryTableName()
@@ -34,11 +29,11 @@ class CategoryActiveQuery extends ActiveQuery {
 //    }
 
     protected function prepairParams(){
-        $this->getEntityTypeIdUsedInFrom();
+//        $this->getEntityTypeIdUsedInFrom();
         $data = [
-            'entityTypeId' => $this->entityTypeId,
+//            'entityTypeId' => $this->entityTypeId,
             'filter' => $this->where,
-            'order' => $this->orderBy,
+            'order' => $this->orderBy?$this->orderBy:null,
             'select' => $this->select,
             //Остальные параметры
         ];
@@ -55,7 +50,7 @@ class CategoryActiveQuery extends ActiveQuery {
             $id = ArrayHelper::getValue($this->where, 'inArray.0');
         }
         $data = [
-            'entityTypeId' => $this->entityTypeId,
+//            'entityTypeId' => $this->entityTypeId,
             'id' => $id
         ];
         $this->params = $data;

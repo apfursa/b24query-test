@@ -1,24 +1,17 @@
 <?php
 
+
 namespace app\modules\wm\b24\crm;
 
-//use yii\base\Model;
-use Bitrix24\B24Object;
-use wm\b24tools\b24Tools;
+
 use Yii;
-use yii\helpers\ArrayHelper;
 
 
-class CrmCategoryActiveRecord extends \app\modules\wm\b24\ActiveRecord
+class InvoiceActiveRecord extends \app\modules\wm\b24\ActiveRecord
 {
     public static function entityTypeId()
     {
-        return null;
-    }
-
-    public static function fieldsMethod()
-    {
-        return 'crm.category.fields';
+        return 31;
     }
 
     public static function tableSchemaCaheKey()
@@ -36,6 +29,11 @@ class CrmCategoryActiveRecord extends \app\modules\wm\b24\ActiveRecord
         return ['entityTypeId' => static::entityTypeId()];
     }
 
+    public static function fieldsMethod()
+    {
+        return 'crm.item.fields';
+    }
+
     public function fields()
     {
         return $this->attributes();
@@ -48,7 +46,6 @@ class CrmCategoryActiveRecord extends \app\modules\wm\b24\ActiveRecord
 
     public static function find()
     {
-        return Yii::createObject(CategoryActiveQuery::className(), [get_called_class()]);
+        return Yii::createObject(InvoiceActiveQuery::className(), [get_called_class()]);
     }
-
 }

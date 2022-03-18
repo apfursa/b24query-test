@@ -5,8 +5,9 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace app\modules\wm\b24;
+namespace app\modules\wm\data;
 
+use app\modules\wm\b24\TableSchema;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -51,29 +52,34 @@ class B24DataProvider extends BaseDataProvider
 
     protected function prepareModels()
     {
-//        Yii::warning('prepareModels', 'prepareModels');
-
 //        if (!$this->query instanceof QueryInterface) {
 //            throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
 //        }
         $query = clone $this->query;
-        //Yii::warning($query, 'dp');
         if (($pagination = $this->getPagination()) !== false) {
-//            $pagination->totalCount = $this->getTotalCount();
-//            if ($pagination->totalCount === 0) {
-//                Yii::warning($pagination->totalCount, '$pagination->totalCount');
-//                return [];
-//            }
+            $pagination->totalCount = $this->getTotalCount();
+            if ($pagination->totalCount === 0) {
+                return [];
+            }
             $query->limit($pagination->getLimit())->offset($pagination->getOffset());
         }
-        Yii::warning(ArrayHelper::toArray($this->getSort()), '$this->getSort()');
         if (($sort = $this->getSort()) !== false) {
-            Yii::warning($sort->getOrders(),'$sort->getOrders()');
             $query->addOrderBy($sort->getOrders());
         }
 //
         return $query->all($this->auth);
         //return [];
+    }
+
+    public function getTotalCount()
+    {
+        if ($this->getPagination() === false) {
+            return $this->getCount();
+        } elseif ($this->_totalCount === null) {
+            $this->_totalCount = $this->prepareTotalCount();
+        }
+
+        return $this->_totalCount;
     }
 
     protected function prepareKeys($models)
@@ -99,14 +105,11 @@ class B24DataProvider extends BaseDataProvider
         parent::setSort($value);
         //TODO исправить
         if (/*$this->query instanceof ActiveQueryInterface && */($sort = $this->getSort()) !== false) {
-            Yii::warning(ArrayHelper::toArray($sort), 102);
             /* @var $modelClass Model */
             $modelClass = $this->query->modelClass;
             $model = $modelClass::instance();
             if (empty($sort->attributes)) {
                 foreach ($model->attributes() as $attribute) {
-//                    Yii::warning($model->attributes(),'$model->attributes()');
-//                    Yii::warning($attribute,'$attribute109');
                     $sort->attributes[$attribute] = [
                         'asc' => [$attribute => SORT_ASC],
                         'desc' => [$attribute => SORT_DESC],
@@ -128,11 +131,10 @@ class B24DataProvider extends BaseDataProvider
 
     protected function prepareTotalCount()
     {
-//        if (!$this->query instanceof QueryInterface) {
-//            throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
-//        }
-//        $query = clone $this->query;
-//        return (int) $query->limit(-1)->offset(-1)->orderBy([])->count('*', $this->db);
-        return 44;
+        if (!$this->query instanceof QueryInterface) {
+            throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
+        }
+        $query = clone $this->query;
+        return (int) $query->count();
     }
 }
